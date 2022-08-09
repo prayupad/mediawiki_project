@@ -12,8 +12,8 @@ variables:
 - group: incubation
   
 stages:
-  - stage: Build_Push_Health_alert_receiver
-    displayName: Build_Push_Health_alert_receiver
+  - stage: mediawiki
+    displayName: mediawiki
     jobs:
       - job: publishfiles
         steps:
