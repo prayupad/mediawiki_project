@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "wikimedia.fullname" . }}-deployment
+  namespace: {{ .Release.namespace }}
+  labels:
+    app: {{ template "wikimedia.name" . }}
+spec:
+  replicas: {{ .Values.app.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "wikimedia.name" . }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: {{ template "wikimedia.name" . }}
+        type: web
+    spec:
+      containers:
+        - name: {{ template "wikimedia.name" . }}
+          image: {{ .Values.app.deployment.image.repository }}:{{ .Values.app.deployment.image.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: httpd-port
+          resources:
+            limits:
+              cpu: {{ .Values.app.deployment.resources.limits.cpu }}
+              memory: {{ .Values.app.deployment.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.app.deployment.resources.requests.cpu }}
+              memory: {{ .Values.app.deployment.resources.requests.memory }}
+          env:
+            - name: WIKIMEDIA_DB_HOST
+              value: {{ template "wikimedia.fullname" . }}-mariadb-service
+            - name: WIKIMEDIA_DB_USER
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: db-username
+            - name: WIKIMEDIA_DB_PASSWORD
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: db-password
+            - name: WIKIMEDIA_DB_NAME
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret
+                  key: dbname

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "wikimedia.fullname" . }}-mariadb-deployment
+  namespace: {{ .Release.namespace }}
+  labels:
+    app: {{ template "wikimedia.name" . }}-db
+    type: database
+spec:
+  replicas: {{ .Values.db.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "wikimedia.name" . }}-db
+      type: database      
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: {{ template "wikimedia.name" . }}-db
+        type: database
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: {{ template "wikimedia.name" . }}-db
+          image: {{ .Values.db.deployment.image.repository }}:{{ .Values.db.deployment.image.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: db-port
+          resources:
+            limits:
+              cpu: {{ .Values.db.deployment.resources.limits.cpu }}
+              memory: {{ .Values.db.deployment.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.db.deployment.resources.requests.cpu }}
+              memory: {{ .Values.db.deployment.resources.requests.memory }}
+          env:
+            - name: MYSQL_USER
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: db-username
+            - name: MYSQL_DATABASE
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret
+                  key: dbname
+            - name: MYSQL_PASSWORD
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: db-password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: dbrootpassword
+          volumeMounts:
+          - name: {{ template "wikimedia.fullname" . }}-vol
+            mountPath: /var/lib/mysql
+      volumes:
+      - name: {{ template "wikimedia.fullname" . }}-vol
+        persistentVolumeClaim:
+          claimName: {{ template "wikimedia.fullname" . }}-mariadb-pvc
