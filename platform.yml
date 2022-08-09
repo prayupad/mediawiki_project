@@ -34,22 +34,28 @@ stages:
             artifactName: 'drop'
             downloadPath: '$(System.ArtifactsDirectory)'
                 
-        - task: Docker@0
-          displayName: 'Build an image'
-          inputs:
-            azureSubscription: $(sercon)
-            azureContainerRegistry: '{"loginServer":"$(name)$(env)acr.azurecr.io", "id" : "/subscriptions/$(sub_id)/resourceGroups/$(name)/providers/Microsoft.ContainerRegistry/registries/$(name)$(env)acr"}'
-            dockerFile: '$(System.ArtifactsDirectory)/drop/Dockerfile'
-            imageName: 'mediawiki'
-            includeLatestTag: true
-            workingDirectory: '$(System.ArtifactsDirectory)/drop'
+        # - task: Docker@0
+        #   displayName: 'Build an image'
+        #   inputs:
+        #     azureSubscription: $(sercon)
+        #     azureContainerRegistry: '{"loginServer":"$(name)$(env)acr.azurecr.io", "id" : "/subscriptions/$(sub_id)/resourceGroups/$(name)/providers/Microsoft.ContainerRegistry/registries/$(name)$(env)acr"}'
+        #     dockerFile: '$(System.ArtifactsDirectory)/drop/Dockerfile'
+        #     imageName: 'mediawiki'
+        #     includeLatestTag: true
+        #     workingDirectory: '$(System.ArtifactsDirectory)/drop'
 
-        - task: Docker@0
-          displayName: 'Push an image'
+        # - task: Docker@0
+        #   displayName: 'Push an image'
+        #   inputs:
+        #     azureSubscription: $(sercon)
+        #     azureContainerRegistry: '{"loginServer":"$(name)$(env)acr.azurecr.io", "id" : "/subscriptions/$(sub_id)/resourceGroups/$(name)/providers/Microsoft.ContainerRegistry/registries/$(name)$(env)acr"}'
+        #     action: 'Push an image'
+        #     imageName: 'mediawiki'
+        #     includeLatestTag: true
+        #     workingDirectory: '$(System.ArtifactsDirectory)/drop'
+        - task: Docker@2
           inputs:
-            azureSubscription: $(sercon)
-            azureContainerRegistry: '{"loginServer":"$(name)$(env)acr.azurecr.io", "id" : "/subscriptions/$(sub_id)/resourceGroups/$(name)/providers/Microsoft.ContainerRegistry/registries/$(name)$(env)acr"}'
-            action: 'Push an image'
-            imageName: 'mediawiki'
-            includeLatestTag: true
-            workingDirectory: '$(System.ArtifactsDirectory)/drop'
+            containerRegistry: 'azure acr'
+            repository: 'mediawiki'
+            command: 'buildAndPush'
+            Dockerfile: 'docker/Dockerfile'
