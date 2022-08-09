@@ -8,14 +8,18 @@ pool:
    - agent.name -equals incubation-lab-
 
 pr:
-  branches:
-    include:
-    - Docker/*
-    - helm/*
+- main
+
+
+# pr:
+#   branches:
+#     include:
+#     - Docker/*
+#     - helm/*
     
-  # paths:
-  #   exclude:
-  #   - README.md
+#   # paths:
+#   #   exclude:
+#   #   - README.md
 variables:
 - group: incubation
   
