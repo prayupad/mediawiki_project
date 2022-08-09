@@ -7,7 +7,15 @@ pool:
   demands:
    - agent.name -equals incubation-lab-
 
-
+pr:
+  branches:
+    include:
+    - Docker/*
+    - helm/*
+    
+  # paths:
+  #   exclude:
+  #   - README.md
 variables:
 - group: incubation
   
