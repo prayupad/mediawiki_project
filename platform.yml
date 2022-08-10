@@ -8,7 +8,7 @@ pool:
    - agent.name -equals incubation-lab-
 
 pr:
-- main
+- main/test
 
 
 # pr:
