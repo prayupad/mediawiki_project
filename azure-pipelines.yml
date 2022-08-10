@@ -27,6 +27,8 @@ steps:
     script: |
       $env:HELM_EXPERIMENTAL_OCI=1
       helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
+      az acr manifest list-metadata --registry incubationlab.azurecr.io --name helm/wikimedia
+
 
 
 
