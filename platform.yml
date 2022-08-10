@@ -71,3 +71,28 @@ stages:
         #     repository: 'mediawiki'
         #     command: 'buildAndPush'
         #     Dockerfile: 'docker/Dockerfile'
+        
+        - task: HelmInstaller@0
+          inputs:
+            helmVersion: '3.8.2'
+            checkLatestHelmVersion: false
+            installKubectl: true
+        # - task: HelmDeploy@0
+        #   inputs:
+        #     # connectionType: 'Azure Resource Manager'
+        #     azureSubscription: 'shivani'
+        #     azureResourceGroup: 'featuress'
+        #     kubernetesCluster: 'featuress-testd-aks'
+        #     command: 'ls'
+        - task: HelmDeploy@0
+          inputs:
+            command: 'package'
+            chartPath: 'helm'
+        - task: HelmDeploy@0
+          inputs:
+            azureSubscriptionForACR: 'shivani'
+            azureResourceGroupForACR: 'featuress'
+            azureContainerRegistry: 'featuresstestdacr.azurecr.io'
+            command: 'save'
+            chartNameForACR: 'helm-mediawiki'
+            chartPathForACR: '$(System.ArtifactsDirectory)'
