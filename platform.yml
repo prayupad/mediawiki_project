@@ -95,4 +95,4 @@ stages:
             azureContainerRegistry: 'featuresstestdacr.azurecr.io'
             command: 'save'
             chartNameForACR: 'helm-mediawiki'
-            chartPathForACR: '$(System.ArtifactsDirectory)'
+            chartPathForACR: '$(System.ArtifactsDirectory)/*.tgz'
