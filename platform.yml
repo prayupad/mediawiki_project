@@ -22,12 +22,13 @@ pr:
 #   #   - README.md
 variables:
 - group: incubation
-  
+- group: helm
+
 stages:
   - stage: mediawiki
     displayName: mediawiki
     jobs:
-      - job: publishfiles
+      - job: mediawiki
         steps:
         - task: CopyFiles@2
           inputs:
@@ -88,9 +89,15 @@ stages:
           inputs:
             command: 'package'
             chartPath: 'helm'
-        - task: AzureCLI@2
+            arguments: '--version 0.0.$(Build.BuildId)'
+
+        - task: PowerShell@2
           inputs:
-            azureSubscription: 'shivani'
-            scriptType: 'ps'
-            scriptLocation: 'inlineScript'
-            inlineScript: 'az acr helm push -n $(name)$(env)acr.azurecr.io $(Build.ArtifactStagingDirectory)/*.tgz'
+            targetType: 'inline'
+            script: |
+              $env:HELM_EXPERIMENTAL_OCI=1
+              helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
+              helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://incubationlab.azurecr.io/helm
+              
+
+
