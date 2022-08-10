@@ -13,6 +13,9 @@ pr:
 
 variables:
 - group: helm
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
@@ -20,9 +23,7 @@ variables:
       $env:HELM_EXPERIMENTAL_OCI=1
       helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+
 
 
 
