@@ -16,6 +16,11 @@ variables:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+- task: HelmInstaller@0
+  inputs:
+    helmVersion: '3.9.2'
+    checkLatestHelmVersion: false
+    installKubectl: true
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
