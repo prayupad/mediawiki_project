@@ -88,11 +88,9 @@ stages:
           inputs:
             command: 'package'
             chartPath: 'helm'
-        - task: HelmDeploy@0
+        - task: AzureCLI@2
           inputs:
-            azureSubscriptionForACR: 'shivani'
-            azureResourceGroupForACR: 'featuress'
-            azureContainerRegistry: 'featuresstestdacr.azurecr.io'
-            command: 'save'
-            chartNameForACR: 'featuresstestdacr.azurecr.io/helm-mediawiki:latest'
-            chartPathForACR: 'helm'
+            azureSubscription: 'shivani'
+            scriptType: 'ps'
+            scriptLocation: 'inlineScript'
+            inlineScript: 'az acr helm push -n $(name)$(env)acr.azurecr.io $(Build.ArtifactStagingDirectory)/*.tgz'
