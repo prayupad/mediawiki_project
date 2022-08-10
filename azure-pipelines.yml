@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pool:
+  name: default
+  demands:
+   - agent.name -equals incubation-lab-
+
+pr:
+- main
+
+variables:
+- group: helm
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $env:HELM_EXPERIMENTAL_OCI=1
+      helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+
+
