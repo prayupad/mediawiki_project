@@ -3,7 +3,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 pool:
-  name: default
+  name: media-wiki
   demands:
    - agent.name -equals incubation-lab-
 
@@ -22,7 +22,7 @@ pr:
 #   #   - README.md
 variables:
 - group: incubation
-- group: helm
+- group: mediawiki-dev
 
 stages:
   - stage: mediawiki
@@ -98,6 +98,19 @@ stages:
               $env:HELM_EXPERIMENTAL_OCI=1
               helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
               helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://incubationlab.azurecr.io/helm
+        - task: HelmDeploy@0
+          inputs:
+            connectionType: 'Azure Resource Manager'
+            azureSubscription: 'shivani'
+            azureResourceGroup: 'featuress'
+            kubernetesCluster: 'featuress-testd-aks'
+            namespace: 'external-secrets'
+            command: 'install'
+            chartType: 'Name'
+            chartName: 'external-secrets/external-secrets'
+            releaseName: 'external-secrets'
+            arguments: '--create-namespace'
               
+        
 
 
