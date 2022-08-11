@@ -82,15 +82,13 @@ stages:
             valueFile: 'override.yaml'
             arguments: '--install'
         
-        - task: PowerShell@2
+        - task: Bash@3
           inputs:
             targetType: 'inline'
             script: |
-              $env:HELM_EXPERIMENTAL_OCI=1
+              export HELM_EXPERIMENTAL_OCI=1
               helm registry login featuressstestdacr.azurecr.io --username $(clientid) --password $(clientsecret)
-              helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://featuressstestdacr.azurecr/helm        
-
-
+              helm push $(System.ArtifactsDirectory)/wikimedia-0.0.$(Build.BuildId).tgz oci://featuressstestdacr.azurecr/helm
         
 
 
