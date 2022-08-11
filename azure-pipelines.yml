@@ -61,11 +61,11 @@ stages:
         #     repository: 'mediawiki'
         #     command: 'buildAndPush'
         #     Dockerfile: 'docker/Dockerfile'
-      - task: HelmInstaller@0
-        inputs:
-          helmVersion: '3.9.2'
-          checkLatestHelmVersion: false
-          installKubectl: true
+        - task: HelmInstaller@0
+          inputs:
+            helmVersion: '3.9.2'
+            checkLatestHelmVersion: false
+            installKubectl: true
 
         - task: HelmDeploy@0
           inputs:
