@@ -5,8 +5,8 @@ app:
   deployment:
     replicaCount: 1
     image:
-      repository: incubationlab.azurecr.io/mediawiki
-      tag: 19
+      repository: featuressstestdacr.azurecr.io/mediawiki
+      tag: 21
     resources:
       limits:
         cpu: 256m
