@@ -6,7 +6,7 @@
 pool:
   name: default
   demands:
-   - agent.name -equals incubation-lab-
+   - agent.name -equals self-linux
 
 pr:
 - main
