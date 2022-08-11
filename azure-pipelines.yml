@@ -23,8 +23,8 @@ trigger:
 #   #   - README.md
 
 variables:
-- group: incubation
-- group: mediawiki-dev
+#- group: incubation
+#- group: mediawiki-dev
 
 stages:
   - stage: mediawiki
