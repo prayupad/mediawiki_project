@@ -75,11 +75,13 @@ stages:
             azureResourceGroup: 'featuresss'
             kubernetesCluster: 'featuresss-testd-aks'
             namespace: 'default'
-            command: 'install'
+            command: 'upgrade'
             chartType: 'FilePath'
             chartPath: '$(System.ArtifactsDirectory)/wikimedia-0.0.$(Build.BuildId).tgz'
             releaseName: 'release-wiki'
             valueFile: 'override.yaml'
+            arguments: '--install'
+        
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
