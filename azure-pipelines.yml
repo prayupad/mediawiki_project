@@ -22,9 +22,9 @@ trigger:
 #   #   exclude:
 #   #   - README.md
 
-#variables:
-#- group: incubation
-#- group: mediawiki-dev
+variables:
+- group: incubation-lab
+
 
 stages:
   - stage: mediawiki
@@ -61,19 +61,43 @@ stages:
         #     repository: 'mediawiki'
         #     command: 'buildAndPush'
         #     Dockerfile: 'docker/Dockerfile'
-        
-        - task: HelmInstaller@0
+      - task: HelmInstaller@0
+        inputs:
+          helmVersion: '3.9.2'
+          checkLatestHelmVersion: false
+          installKubectl: true
+
+        - task: HelmDeploy@0
           inputs:
-            helmVersion: '3.8.2'
-            checkLatestHelmVersion: false
-            installKubectl: true
-        # - task: HelmDeploy@0
-        #   inputs:
-        #     # connectionType: 'Azure Resource Manager'
-        #     azureSubscription: 'shivani'
-        #     azureResourceGroup: 'featuress'
-        #     kubernetesCluster: 'featuress-testd-aks'
-        #     command: 'ls'
+            command: 'package'
+            chartPath: 'helm'
+            arguments: '--version 0.0.$(Build.BuildId)'     
+
+        - task: HelmDeploy@0
+          inputs:
+            connectionType: 'Azure Resource Manager'
+            azureSubscription: 'shivani-personal'
+            azureResourceGroup: 'featuresss'
+            kubernetesCluster: 'featuresss-testd-aks'
+            namespace: 'default'
+            command: 'install'
+            chartType: 'Name'
+            chartName: 'wikimedia'
+            chartVersion: '0.0.$(Build.BuildId)'
+            releaseName: 'release-mediawiki'
+            valueFile: 'override.yaml'
+
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $env:HELM_EXPERIMENTAL_OCI=1
+              helm registry login featuressstestdacr.azurecr.io --username $(clientid) --password $(clientsecret)
+              helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://incubationlab.azurecr.io/helm        
+
+
+        
+
 
 
               
