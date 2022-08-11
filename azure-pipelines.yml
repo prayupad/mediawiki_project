@@ -88,7 +88,7 @@ stages:
             script: |
               $env:HELM_EXPERIMENTAL_OCI=1
               helm registry login featuressstestdacr.azurecr.io --username $(clientid) --password $(clientsecret)
-              helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://incubationlab.azurecr.io/helm        
+              helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://featuressstestdacr.azurecr/helm        
 
 
         
