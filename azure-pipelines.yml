@@ -22,7 +22,7 @@ trigger:
 #   #   exclude:
 #   #   - README.md
 
-variables:
+#variables:
 #- group: incubation
 #- group: mediawiki-dev
 
