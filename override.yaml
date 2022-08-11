@@ -1,0 +1,40 @@
+imagePullSecrets: regcred
+nameOverride: dev
+fullnameOverride: dev
+app:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: incubationlab.azurecr.io/mediawiki
+      tag: 19
+    resources:
+      limits:
+        cpu: 256m
+        memory: 500Mi
+      requests:
+        cpu: 128m
+        memory: 256Mi
+db:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: mariadb
+      tag: latest
+    resources:
+      limits:
+        cpu: 256m
+        memory: 500Mi
+      requests:
+        cpu: 128m
+        memory: 256Mi
+
+persistentVolume:
+  storage: 128Mi
+
+secrets:
+  dbname: d2lraW1lZGlh
+  dbpassword: cGFzc3dvcmRAMTIz
+  dbrootpassword: cGFzc3dvcmRAcm9vdA==
+  dbuser: d2lraW1lZGlhX3VzZXI=
+
+
