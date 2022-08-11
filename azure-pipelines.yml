@@ -77,7 +77,7 @@ stages:
             namespace: 'default'
             command: 'install'
             chartType: 'FilePath'
-            chartPath: '$(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz'
+            chartPath: '$(System.ArtifactsDirectory)/wikimedia-0.0.$(Build.BuildId).tgz'
             releaseName: 'release-wiki'
             valueFile: 'override.yaml'
         - task: PowerShell@2
