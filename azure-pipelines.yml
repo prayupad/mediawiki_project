@@ -74,11 +74,6 @@ stages:
         #     azureResourceGroup: 'featuress'
         #     kubernetesCluster: 'featuress-testd-aks'
         #     command: 'ls'
-        - task: HelmDeploy@0
-          inputs:
-            command: 'package'
-            chartPath: 'helm'
-            arguments: '--version 0.0.$(Build.BuildId)'
 
 
               
