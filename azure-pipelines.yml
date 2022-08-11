@@ -8,31 +8,110 @@ pool:
   demands:
    - agent.name -equals self-linux
 
-pr:
-- main
 
+pr:
+- main/test
+
+
+# pr:
+#   branches:
+#     include:
+#     - Docker/*
+#     - helm/*
+    
+#   # paths:
+#   #   exclude:
+#   #   - README.md
 variables:
 - group: incubation
+- group: mediawiki-dev
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-- task: HelmInstaller@0
-  inputs:
-    helmVersion: '3.9.2'
-    checkLatestHelmVersion: false
-    installKubectl: true
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      $env:HELM_EXPERIMENTAL_OCI=1
-      helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
-      helm push C:\test\wikimedia-*.tgz oci://incubationlab.azurecr.io/helm
-      az acr manifest list-metadata --registry incubationlab.azurecr.io --name helm/wikimedia
+stages:
+  - stage: mediawiki
+    displayName: mediawiki
+    jobs:
+      - job: mediawiki
+        steps:
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: 'docker'
+            Contents: '**'
+            TargetFolder: '$(build.artifactstagingdirectory)'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.ArtifactsDirectory)'
+                
+        - task: Docker@0
+          displayName: 'Build an image'
+          inputs:
+            azureSubscription: $(sercon)
+            azureContainerRegistry: '{"loginServer":"$(name)$(env)acr.azurecr.io", "id" : "/subscriptions/$(sub_id)/resourceGroups/$(name)/providers/Microsoft.ContainerRegistry/registries/$(name)$(env)acr"}'
+            dockerFile: '$(System.ArtifactsDirectory)/drop/Dockerfile'
+            imageName: 'mediawiki'
+            includeLatestTag: true
+            workingDirectory: '$(System.ArtifactsDirectory)/drop'
 
+        - task: Docker@0
+          displayName: 'Push an image'
+          inputs:
+            azureSubscription: $(sercon)
+            azureContainerRegistry: '{"loginServer":"$(name)$(env)acr.azurecr.io", "id" : "/subscriptions/$(sub_id)/resourceGroups/$(name)/providers/Microsoft.ContainerRegistry/registries/$(name)$(env)acr"}'
+            action: 'Push an image'
+            imageName: 'mediawiki'
+            includeLatestTag: true
+            workingDirectory: '$(System.ArtifactsDirectory)/drop'
+        # - task: Docker@2
+        #   inputs:
+        #     containerRegistry: 'azure acr'
+        #     repository: 'mediawiki'
+        #     command: 'buildAndPush'
+        #     Dockerfile: 'docker/Dockerfile'
+        
+        - task: HelmInstaller@0
+          inputs:
+            helmVersion: '3.8.2'
+            checkLatestHelmVersion: false
+            installKubectl: true
+        # - task: HelmDeploy@0
+        #   inputs:
+        #     # connectionType: 'Azure Resource Manager'
+        #     azureSubscription: 'shivani'
+        #     azureResourceGroup: 'featuress'
+        #     kubernetesCluster: 'featuress-testd-aks'
+        #     command: 'ls'
+        - task: HelmDeploy@0
+          inputs:
+            command: 'package'
+            chartPath: 'helm'
+            arguments: '--version 0.0.$(Build.BuildId)'
 
-
-
-
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $env:HELM_EXPERIMENTAL_OCI=1
+              helm registry login incubationlab.azurecr.io --username $(clientid) --password $(clientsecret)
+              helm push $(System.ArtifactsDirectory)\wikimedia-0.0.$(Build.BuildId).tgz oci://incubationlab.azurecr.io/helm
+        - task: HelmDeploy@0
+          inputs:
+            connectionType: 'Azure Resource Manager'
+            azureSubscription: 'shivani'
+            azureResourceGroup: 'featuress'
+            kubernetesCluster: 'featuress-testd-aks'
+            namespace: 'external-secrets'
+            command: 'install'
+            chartType: 'Name'
+            chartName: 'external-secrets/external-secrets'
+            releaseName: 'external-secrets'
+            arguments: '--create-namespace'
+              
+        
 
