@@ -77,9 +77,8 @@ stages:
             namespace: 'default'
             command: 'install'
             chartType: 'Name'
-            chartName: 'wikimedia'
-            chartVersion: '0.0.$(Build.BuildId)'
-            releaseName: 'release-mediawiki'
+            chartName: 'wikimedia-0.0.$(Build.BuildId).tgz'
+            releaseName: 'release-wiki'
             valueFile: 'override.yaml'
 
         - task: PowerShell@2
