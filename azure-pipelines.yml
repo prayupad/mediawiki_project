@@ -12,7 +12,8 @@ pr:
 - main
 
 variables:
-- group: helm
+- group: incubation
+
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
