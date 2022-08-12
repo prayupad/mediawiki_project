@@ -9,7 +9,7 @@ pool:
    - agent.name -equals self-linux
 
 
-trigger:
+pr:
 - main
 
 # pr:
@@ -108,7 +108,7 @@ stages:
       pool:
         name: default
         demands:
-        - agent.name -equals incubation-lab-
+        - agent.name -equals self-linux
       # creates an environment if it doesn't exist
       environment: 'incubation-lab-k8s'
       # CODE TO DEPLOY IN PRE_PROD        
@@ -122,7 +122,7 @@ stages:
       pool:
         name: default
         demands:
-        - agent.name -equals incubation-lab-
+        - agent.name -equals self-linux
       # creates an environment if it doesn't exist
       environment: 'incubation-lab-k8s'
       # CODE TO DEPLOY IN PROD
