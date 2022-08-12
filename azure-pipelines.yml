@@ -90,7 +90,7 @@ stages:
             namespace: 'default'
             command: 'apply'
             useConfigurationFile: true
-            configuration: '$(System.ArtifactsDirectory)/external-secrets/external-secrets.yaml'
+            configuration: 'external-secrets/external-secrets.yaml'
 
         - task: Bash@3
           inputs:
