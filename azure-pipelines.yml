@@ -82,6 +82,7 @@ stages:
             releaseName: 'release-wiki'
             valueFile: 'override.yaml'
             arguments: '--install'
+        
         - task: Kubernetes@1
           inputs:
             connectionType: 'Kubernetes Service Connection'
