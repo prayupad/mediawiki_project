@@ -99,8 +99,33 @@ stages:
               export HELM_EXPERIMENTAL_OCI=1
               helm registry login featuressstestdacr.azurecr.io --username $(clientid) --password $(clientsecret)
               helm push $(System.ArtifactsDirectory)/wikimedia-0.0.$(Build.BuildId).tgz oci://featuressstestdacr.azurecr.io/helm
-        
+  - stage: staging
+    jobs:
+    - deployment: Deploy
+      displayName: deploy 
+      
+      condition: succeeded()
+      pool:
+        name: default
+        demands:
+        - agent.name -equals incubation-lab-
+      # creates an environment if it doesn't exist
+      environment: 'incubation-lab-k8s'
+      # CODE TO DEPLOY IN PRE_PROD        
 
+  - stage: Prod
+    jobs:
+    - deployment: Deploy
+      displayName: deploy 
+      
+      condition: succeeded()
+      pool:
+        name: default
+        demands:
+        - agent.name -equals incubation-lab-
+      # creates an environment if it doesn't exist
+      environment: 'incubation-lab-k8s'
+      # CODE TO DEPLOY IN PROD
 
 
               
