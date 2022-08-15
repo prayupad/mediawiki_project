@@ -2,11 +2,12 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
-pool:
-  name: default
-  demands:
-   - agent.name -equals self-linux
+pool: 
+  vmImage: ubuntu-latest 
+# pool:
+#   name: default
+#   demands:
+#    - agent.name -equals self-linux
 
 
 trigger:
@@ -69,8 +70,8 @@ stages:
             scriptLocation: 'inlineScript'
             inlineScript: |
               az account set --subscription 7cec1366-0ad8-4568-b32b-391336281545
-              
-              str=$(az acr credential show -n testincubation.azurecr.io --resource-group $(rg) --query passwords[0].value)
+              az acr list
+              str=$(az acr credential show -n testincubation.azurecr.io --resource-group incubation-lab --query passwords[0].value)
               echo $str
               temp=`echo "$str" | tr -d '"'`
               echo $temp
