@@ -68,8 +68,21 @@ stages:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              az account set --subscription $(sub_id)
-              az aks get-credentials --resource-group $(rg) --name "$(cluster_name)"
+              az account set --subscription 7cec1366-0ad8-4568-b32b-391336281545
+              
+              str=$(az acr credential show -n testincubation.azurecr.io --resource-group $(rg) --query passwords[0].value)
+              echo $str
+              temp=`echo "$str" | tr -d '"'`
+              echo $temp
+        - task: CmdLine@2
+          displayName: Install Snyk for ACR
+          inputs:
+                  script: |
+                    
+                    sudo  npm install -g snyk
+                    sudo  npm install -g snyk-to-html
+                    snyk config set api='f7fca78f-ffd4-4607-bf68-a86048b829aa'
+                    snyk container test 'mediawiki' --username='incubation-lab' --password='$temp' --json | snyk-to-html -o 'mediawiki.html'
         - task: Bash@3
           displayName: configure external secret
           inputs:
