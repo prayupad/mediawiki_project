@@ -9,7 +9,7 @@ pool:
    - agent.name -equals self-linux
 
 
-pr:
+trigger:
 - none
 
 # pr:
