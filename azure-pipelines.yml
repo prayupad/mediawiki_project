@@ -61,7 +61,21 @@ stages:
         #     repository: 'mediawiki'
         #     command: 'buildAndPush'
         #     Dockerfile: 'docker/Dockerfile'
-
+        - task: AzureCLI@2
+          displayName: set context
+          inputs:
+            azureSubscription: 'shivani-personal'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az account set --subscription $(sub_id)
+              az aks get-credentials --resource-group $(rg) --name "$(cluster_name)"
+        - task: Bash@3
+          displayName: configure external secret
+          inputs:
+            targetType: 'inline'
+            script: |
+              kubectl apply -f external-secrets/external-secrets.yaml
         - task: HelmDeploy@0
           inputs:
             command: 'package'
