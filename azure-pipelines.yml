@@ -10,7 +10,7 @@ pool:
 
 
 pr:
-- main
+- none
 
 # pr:
 #   branches:
