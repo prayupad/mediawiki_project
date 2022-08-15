@@ -96,15 +96,6 @@ stages:
             releaseName: 'release-wiki'
             valueFile: 'override.yaml'
             arguments: '--install'
-        
-        - task: Kubernetes@1
-          inputs:
-            connectionType: 'Kubernetes Service Connection'
-            kubernetesServiceEndpoint: 'incubation-lab-k8s-featuresss-testd-aks-default-1660276169231'
-            namespace: 'default'
-            command: 'apply'
-            useConfigurationFile: true
-            configuration: 'external-secrets/external-secrets.yaml'
 
         - task: Bash@3
           inputs:
