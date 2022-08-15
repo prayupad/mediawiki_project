@@ -92,14 +92,14 @@ stages:
         - task: CopyFiles@2
           displayName: Copy test result file to artifact
           inputs: 
-                  SourceFolder: '/test' 
+                  #SourceFolder: '/test' 
                   Contents: '*.html'
                   TargetFolder: '/home/vsts/work/1/a'
 
         - task: PublishBuildArtifacts@1
           displayName: Publish DAST test results
           inputs:
-                  PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                  PathtoPublish: '/test'
                   ArtifactName: 'DASTReport'
                   publishLocation: 'Container'
         - task: Bash@3
