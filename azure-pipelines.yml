@@ -85,7 +85,8 @@ stages:
                     #sudo apt-get install npm -g snyk
                     #sudo apt-get install npm -g snyk-to-html
                     snyk config set api='f7fca78f-ffd4-4607-bf68-a86048b829aa'
-                    snyk container test 'mediawiki' --username='incubation-lab' --password='$temp' --json | snyk-to-html -o 'mediawiki.html'
+                    cmd = 'snyk container test 'mediawiki' --username='incubation-lab' --password='$temp' --json | snyk-to-html -o 'mediawiki'.html'
+                    print(cmd)
         - task: CopyFiles@2
           displayName: Copy test result file to artifact
           inputs:
