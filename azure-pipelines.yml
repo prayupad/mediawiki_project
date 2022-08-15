@@ -108,26 +108,26 @@ stages:
             targetType: 'inline'
             script: |
               kubectl apply -f external-secrets/external-secrets.yaml
-        # - task: HelmDeploy@0
-        #   inputs:
-        #     command: 'package'
-        #     chartPath: 'helm'
-        #     arguments: '--version 0.0.$(Build.BuildId)'   
+        - task: HelmDeploy@0
+          inputs:
+            command: 'package'
+            chartPath: 'helm'
+            arguments: '--version 0.0.$(Build.BuildId)'   
           
 
-        # - task: HelmDeploy@0
-        #   inputs:
-        #     connectionType: 'Azure Resource Manager'
-        #     azureSubscription: 'shivani-personal'
-        #     azureResourceGroup: 'featuresss'
-        #     kubernetesCluster: 'featuresss-testd-aks'
-        #     namespace: 'default'
-        #     command: 'upgrade'
-        #     chartType: 'FilePath'
-        #     chartPath: '$(System.ArtifactsDirectory)/wikimedia-0.0.$(Build.BuildId).tgz'
-        #     releaseName: 'release-wiki'
-        #     valueFile: 'override.yaml'
-        #     arguments: '--install'
+        - task: HelmDeploy@0
+          inputs:
+            connectionType: 'Azure Resource Manager'
+            azureSubscription: 'shivani-personal'
+            azureResourceGroup: 'featuresss'
+            kubernetesCluster: 'featuresss-testd-aks'
+            namespace: 'default'
+            command: 'upgrade'
+            chartType: 'FilePath'
+            chartPath: '$(System.ArtifactsDirectory)/wikimedia-0.0.$(Build.BuildId).tgz'
+            releaseName: 'release-wiki'
+            valueFile: 'override.yaml'
+            arguments: '--install'
 
         - task: Bash@3
           inputs:
