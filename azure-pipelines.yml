@@ -85,15 +85,16 @@ stages:
                     #sudo apt-get install npm -g snyk
                     #sudo apt-get install npm -g snyk-to-html
                     snyk config set api='f7fca78f-ffd4-4607-bf68-a86048b829aa'
-                    snyk container test 'mediawiki' --username='incubation-lab' --password='$temp' --json | snyk-to-html -o 'mediawiki.html'
-                    mkdir /test
-                    cp mediawiki.html /test/mediawiki.html
+                    snyk container test 'mediawiki' --username='incubation-lab' --password='$temp' --json | snyk-to-html -o 'mediawikii.html'
+                    mkdir -p /test
+                    yes | cp -rf mediawikii.html /test/mediawikii.html
                     ls /test
         - task: CopyFiles@2
           displayName: Copy test result file to artifact
           inputs:
                   Contents: '*.html'
                   TargetFolder: '/home/vsts/work/1/a'
+                  
         - task: PublishBuildArtifacts@1
           displayName: Publish DAST test results
           inputs:
