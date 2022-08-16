@@ -20,11 +20,11 @@ COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
 
 #installing WIKIMEDIA
 
-RUN wget https://releases.wikimedia.org/mediawiki/1.37/mediawiki-1.37.1.tar.gz --no-check-certificate &&\
-    tar -xvzf mediawiki-1.37.1.tar.gz &&\
-    rm -rf mediawiki-1.37.1.tar.gz &&\
-    mv mediawiki-1.37.1 /usr/local/apache2/htdocs/ &&\
-    mv /usr/local/apache2/htdocs/mediawiki-1.37.1 /usr/local/apache2/htdocs/wiki
+RUN wget https://releases.wikimedia.org/mediawiki/1.38/mediawiki-1.38.2.tar.gz --no-check-certificate &&\
+    tar -xvzf mediawiki-1.38.2.tar.gz &&\
+    rm -rf mediawiki-1.38.2.tar.gz &&\
+    mv mediawiki-1.38.2 /usr/local/apache2/htdocs/ &&\
+    mv /usr/local/apache2/htdocs/mediawiki-1.38.2 /usr/local/apache2/htdocs/wiki
 
 CMD /usr/local/apache2/bin/apachectl -DFOREGROUND
 EXPOSE 80
