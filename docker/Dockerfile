@@ -12,10 +12,10 @@ RUN wget  https://downloads.apache.org/httpd/httpd-2.4.54.tar.gz  --no-check-cer
 
 #installing php7
 
-RUN wget https://www.php.net/distributions/php-7.3.7.tar.gz --no-check-certificate &&\
-    tar -xvzf php-7.3.7.tar.gz &&\
-    rm -rf php-7.3.7.tar.gz &&\
-    cd php-7.3.7 && ./configure --with-apxs2=/usr/local/apache2/bin/apxs --enable-mbstring --enable-mysqlnd --with-mysqli && make clean && make && make install 
+RUN wget https://www.php.net/distributions/php-7.3.19.tar.gz --no-check-certificate &&\
+    tar -xvzf php-7.3.19.tar.gz &&\
+    rm -rf php-7.3.19.tar.gz &&\
+    cd php-7.3.19 && ./configure --with-apxs2=/usr/local/apache2/bin/apxs --enable-mbstring --enable-mysqlnd --with-mysqli && make clean && make && make install 
 COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
 
 #installing WIKIMEDIA
