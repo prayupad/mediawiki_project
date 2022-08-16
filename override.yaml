@@ -6,7 +6,7 @@ app:
     replicaCount: 1
     image:
       repository: featuressstestdacr.azurecr.io/mediawiki
-      tag: 21
+      tag: latest
     resources:
       limits:
         cpu: 256m
