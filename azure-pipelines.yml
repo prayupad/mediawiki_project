@@ -10,8 +10,8 @@ pool:
    - agent.name -equals self-linux
 
 
-trigger:
-- none
+pr:
+- main
 
 # pr:
 #   branches:
