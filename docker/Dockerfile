@@ -2,6 +2,8 @@ FROM centos:7
 #installing required packages 
 RUN yum install apr-util-devel gcc pcre-devel libxml2-devel wget curl gcc-devel curl-devel httpd-devel make -y 
 
+RUN yum install httpd24-httpd rh-php73 rh-php73-php rh-php73-php-mbstring rh-php73-php-mysqlnd rh-php73-php-gd rh-php73-php-xml -y
+
 WORKDIR /root
 #installing httpd service 
 RUN wget  https://downloads.apache.org/httpd/httpd-2.4.54.tar.gz  --no-check-certificate &&\
